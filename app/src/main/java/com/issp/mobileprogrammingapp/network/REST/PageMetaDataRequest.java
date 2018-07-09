@@ -11,9 +11,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class MetaDataPageRequest extends Request<PageMetaData> {
+public class PageMetaDataRequest extends Request<PageMetaData> {
     private Response.Listener<PageMetaData> listener;
-    public MetaDataPageRequest(String url,
+    public PageMetaDataRequest(String url,
                                Response.Listener<PageMetaData> listener,
                                Response.ErrorListener errorListener) {
         super(Method.GET, url, errorListener);

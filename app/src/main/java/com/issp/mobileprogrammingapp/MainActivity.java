@@ -1,53 +1,56 @@
-package com.issp.mobileprogrammingapp;
+package com.ipss.worldbank;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
+import android.widget.ImageView;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.issp.mobileprogrammingapp.entity.Country;
-import com.issp.mobileprogrammingapp.entity.Indicator;
-import com.issp.mobileprogrammingapp.entity.Topic;
-import com.issp.mobileprogrammingapp.network.NetworkController;
-import com.issp.mobileprogrammingapp.network.REST.CountryRequest;
-import com.issp.mobileprogrammingapp.network.REST.IndicatorRequest;
-import com.issp.mobileprogrammingapp.network.REST.TopicsRequest;
+import com.ipss.worldbank.chart.LoadChartActivity;
+import com.ipss.worldbank.chart.LoadType;
+import com.ipss.worldbank.country.ScrollViewCountryActivity;
+import com.ipss.worldbank.indicator.ScrollViewIndicatorActivity;
+import com.ipss.worldbank.topic.ScrollViewTopicActivity;
 
 public class MainActivity extends AppCompatActivity {
+    private Context context;
 
-    private Button btn;
-    private TextView textView;
-    private NetworkController net;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = this;
         setContentView(R.layout.activity_main);
-        btn = findViewById(R.id.btn);
-        textView = findViewById(R.id.ResponseText);
-        net = NetworkController.getInstance(this);
-        btn.setOnClickListener(new View.OnClickListener() {
+        ImageView base1 = findViewById(R.id.base1);
+        ImageView base2 = findViewById(R.id.base2);
+        ImageView base3 = findViewById(R.id.base3);
+        ImageView base4 = findViewById(R.id.base4);
+
+        base1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = "http://api.worldbank.org/v2/indicators?format=json";
-                textView.setText(url);
-                final Request req = new IndicatorRequest(url,
-                        new Response.Listener<Indicator[]>() {
-                            @Override
-                            public void onResponse(Indicator[] response) {
-                                textView.setText(response[0].getId());
-                            }
-                        },
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                textView.setText("ERROR");
-                            }
-                        });
-                net.addToRequestQueue(req);
+                startActivity(new Intent(context, ScrollViewCountryActivity.class));
+            }
+        });
+
+        base2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(context, ScrollViewTopicActivity.class));
+            }
+        });
+
+        base3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(context, LoadChartActivity.class).putExtra("type", LoadType.CHART.ordinal()));
+            }
+        });
+
+        base4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(context, LoadChartActivity.class).putExtra("type", LoadType.DATA.ordinal()));
             }
         });
     }
