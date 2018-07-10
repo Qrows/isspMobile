@@ -10,6 +10,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 
 import com.issp.mobileprogrammingapp.entity.Country;
 import com.issp.mobileprogrammingapp.entity.Indicator;
+import com.issp.mobileprogrammingapp.entity.IndicatorData;
 import com.issp.mobileprogrammingapp.entity.PageMetaData;
 import com.issp.mobileprogrammingapp.entity.Topic;
 import com.issp.mobileprogrammingapp.network.NetworkController;
@@ -86,7 +87,7 @@ public class WorldBanksRest {
 
     public void getIndicatorFromCountry(Country country,
                                         Indicator indicator,
-                                        final Response.Listener<Indicator[]> listener,
+                                        final Response.Listener<IndicatorData[]> listener,
                                         final Response.ErrorListener errorListener) {
         final String baseUrl = wbBaseUrl + wbCountriesUrl + slash + country.getIso2code() + slash
                 + wbIndicatorUrl + slash + indicator.getId() + qm + wbJsonFormat + and + wbperPage;
@@ -95,7 +96,7 @@ public class WorldBanksRest {
                     @Override
                     public void onResponse(PageMetaData response) {
                         String url = baseUrl + response.getTotal();
-                        IndicatorRequest request = new IndicatorRequest(url,
+                        IndicatorDataRequest request = new IndicatorDataRequest(url,
                                 listener, errorListener);
                         networkController.addToRequestQueue(request);
                     }
