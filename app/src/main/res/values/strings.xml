@@ -1,3 +1,25 @@
+<!DOCTYPE resources [<!ENTITY appname "World Bank">]>
+
 <resources>
-    <string name="app_name">MobileProgrammingApp</string>
+    <string name="app_name">&appname;</string>
+    <string name="research_for_country">Research for country</string>
+    <string name="research_for_topic">Research for topic</string>
+    <string name="load_chart">Load chart</string>
+    <string name="load_data">Load data</string>
+    <string name="isocode">iso</string>
+    <string name="country">country</string>
+    <string name="region">region</string>
+    <string name="country_hint">Country</string>
+    <string name="topic_hint">Topic</string>
+    <string name="indicator_hint">Indicator</string>
+    <string name="description">Description</string>
+    <string name="close">Close</string>
+    <string name="action_info">About &appname;</string>
+    <string name="research_for_country_help_msg">Retrieve a chart filtering by country, topic and then indicator.</string>
+    <string name="research_for_topic_help_msg">Retrieve a chart filtering by topic, indicator and then country.</string>
+    <string name="load_chart_help_msg">Choose a PNG image chart to be loaded from the database.</string>
+    <string name="load_data_help_msg">Choose a chart\'s data set to be loaded from the database.</string>
+    <string name="error">Error</string>
+    <string name="error_msg">Unable to retrieve the content…</string>
+    <string name="about_msg"><b>Acknowledgments</b>\nPhilipp Jahoda (PhilJay) for MPAndroidChart\n\nhjnilsson for the countries flags (https://github.com/hjnilsson/country-flags)\n\nAndroid Studio (a really funny IDE)\n\n<b>Developers:</b>\nLeonardo Izzi\nVincenzo Pronestí\nBeatrice Savoia\nChristian Santapaola</string>
 </resources>
