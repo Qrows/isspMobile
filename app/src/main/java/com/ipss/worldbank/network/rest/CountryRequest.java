@@ -15,9 +15,20 @@ import org.json.JSONObject;
 import java.util.LinkedList;
 
 public class CountryRequest extends Request<Country[]> {
+    /**
+     * CountryRequest is a specialized kind of request which get data from a given url
+     * using an HTTP GET method and parse it to Country[] objects.
+     * This class doesn't do networking work.
+     * The response is expected to be of json format, if not the request will fail.
+     * */
     private Response.Listener<Country[]> listener;
 
     public CountryRequest(String url, Response.Listener<Country[]> listener, Response.ErrorListener errorListener) {
+        /**
+         * @param url where send the HTTP GET request
+         * @param listener tell what to do when the request receive ha successful response
+         * @param errorListener tell what to do when the request fail
+         * */
         super(Method.GET, url, errorListener);
         this.listener = listener;
     }

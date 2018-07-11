@@ -15,12 +15,10 @@ import com.ipss.worldbank.network.NetworkController;
 public class WorldBanksRest {
     /** The WorldBanKRest Class handle the REST call to the worldbank web site.
      *  It support:
-     *  <ul>
-     *      <li>Fetch all country data</li>
-     *      <li>Fetch all topics</li>
-     *      <li>Fetch all Indicator given a topic</Li>
-     *      <li>Fetch all data given a country and a indicator</li>
-     *  </ul>
+     *    + Fetch all country data
+     *    + Fetch all topics
+     *    + Fetch all Indicator given a topic
+     *    + Fetch all data given a country and a indicator
      * */
     private NetworkController networkController;
     private static final String slash = "/";
@@ -41,7 +39,7 @@ public class WorldBanksRest {
     public void getCountryList(Response.Listener<Country[]> listener,
                                Response.ErrorListener errorListener) {
         /**
-         * The <i>getCountryList()</i> fetch all country data from worldbank in a asynchronous way.
+         * The getCountryList() fetch all country data from worldbank in a asynchronous way.
          * @param listener: handle what to do when the request is successful.
          * @param ErrorListener: handle what happen when the request is unsuccessful.
          */
@@ -54,7 +52,13 @@ public class WorldBanksRest {
 
     public void getTopicsList(Response.Listener<Topic[]> listener,
                               Response.ErrorListener errorListener) {
-        final String baseUrl = wbBaseUrl + wbTopicsUrl + qm + wbJsonFormat + and + wbperPage;
+        /**
+         * The getTopicsList() fetch all topic data from worldbank in a asynchronous way.
+         * @param listener: handle what to do when the request is successful.
+         * @param ErrorListener: handle what happen when the request is unsuccessful.
+         */
+        String baseUrl = wbBaseUrl + wbTopicsUrl + qm + wbJsonFormat + and + wbperPage;
+        // request to fetch metadata and then fetch all topic, TopicsListener fetch all country.
         TopicsListener topicsListener = new TopicsListener(baseUrl, listener, errorListener);
         PageMetaDataRequest mdRequest = new PageMetaDataRequest(baseUrl + 1, topicsListener, errorListener);
         networkController.addToRequestQueue(mdRequest);
@@ -64,8 +68,18 @@ public class WorldBanksRest {
             Topic topic,
             Response.Listener<Indicator[]> listener,
             Response.ErrorListener errorListener) {
+        /**
+         * The getIndicatorsListFromTopic() fetch all indicator data regarding a topic
+         * from worldbank in a asynchronous way.
+         * @param topic: the topic of all indicator.
+         * @param listener: handle what to do when the request is successful.
+         * @param ErrorListener: handle what happen when the request is unsuccessful.
+         */
+
         String baseUrl = wbBaseUrl + wbTopicsUrl + slash + topic.getId() + slash + wbIndicatorUrl +
                 qm + wbJsonFormat + and + wbperPage;
+        // request to fetch metadata and then fetch all requested indicator,
+        // IndicatorListener fetch all indicator.
         IndicatorListener indicatorListener = new IndicatorListener(baseUrl, listener, errorListener);
         PageMetaDataRequest mdRequest = new PageMetaDataRequest(baseUrl + 1, indicatorListener, errorListener);
         networkController.addToRequestQueue(mdRequest);
@@ -75,15 +89,31 @@ public class WorldBanksRest {
                                         Indicator indicator,
                                         Response.Listener<IndicatorData[]> listener,
                                         Response.ErrorListener errorListener) {
+        /**
+         * The getDataFromCountryAndIndicator() fetch all data regarding
+         * a contry and a indicator from worldbank in a asynchronous way.
+         * @param country: country of which we want to get data, need iso2code.
+         * @param indicator: indicator, the kind of data we want to receive. need id.
+         * @param listener: handle what to do when the request is successful.
+         * @param ErrorListener: handle what happen when the request is unsuccessful.
+         */
+
         String baseUrl = wbBaseUrl + wbCountriesUrl + slash + country.getIso2code() + slash
                 + wbIndicatorUrl + slash + indicator.getId() + qm + wbJsonFormat + and + wbperPage;
+        // request to fetch metadata and then fetch all Data, IndicatorDataListener fetch all country.
         IndicatorDataListener indicatorDataListener = new IndicatorDataListener(baseUrl, listener, errorListener);
         PageMetaDataRequest mdRequest = new PageMetaDataRequest(baseUrl + 1, indicatorDataListener, errorListener);
         networkController.addToRequestQueue(mdRequest);
     }
 
     abstract class PageMetaDataListener implements Response.Listener<PageMetaData> {
-
+        /**
+         * PageMetaDataListener class fetch the metadata from a worldbanks request.
+         * It permit to receive how many entry has the data that we want to request,
+         * so that we can fetch all data in a single request.
+         * For the single specific request extends this class to implements
+         * the specific domain logic.
+         * */
         private String baseUrl;
         private Response.Listener listener;
         private Response.ErrorListener errorListener;
@@ -95,10 +125,6 @@ public class WorldBanksRest {
 
         public String getBaseUrl() {
             return baseUrl;
-        }
-
-        public void setBaseUrl(String baseUrl) {
-            this.baseUrl = baseUrl;
         }
 
         public Response.Listener getListener() {
@@ -113,15 +139,15 @@ public class WorldBanksRest {
             return errorListener;
         }
 
-        public void setErrorListener(Response.ErrorListener errorListener) {
-            this.errorListener = errorListener;
-        }
-
         @Override
         public abstract void onResponse(PageMetaData response);
     }
 
     class CountryListener extends PageMetaDataListener {
+        /**
+         * CountryListener class fetch all metadata, like the number of country,
+         * and send a second request asking for all the country in a single request
+         * */
         public CountryListener(String baseUrl, Response.Listener<Country[]> listener, Response.ErrorListener errorListener) {
             super(baseUrl, listener, errorListener);
         }
@@ -135,6 +161,11 @@ public class WorldBanksRest {
     }
 
     class TopicsListener extends PageMetaDataListener {
+        /**
+         * TopicsListener class fetch all metadata, like the number of topics,
+         * and send a second request asking for all the topics in a single request
+         * */
+
         public TopicsListener(String baseUrl, Response.Listener<Topic[]> listener, Response.ErrorListener errorListener) {
             super(baseUrl, listener, errorListener);
         }
@@ -149,6 +180,11 @@ public class WorldBanksRest {
     }
 
     class IndicatorListener extends PageMetaDataListener {
+        /**
+         * TopicsListener class fetch all metadata, like the number of indicator,
+         * and send a second request asking for all the requested indicator in a single request
+         * */
+
         public IndicatorListener(String baseUrl, Response.Listener<Indicator[]> listener, Response.ErrorListener errorListener) {
             super(baseUrl, listener, errorListener);
         }
@@ -163,6 +199,11 @@ public class WorldBanksRest {
     }
 
     class IndicatorDataListener extends PageMetaDataListener {
+        /**
+         * TopicsListener class fetch all metadata, like the number of Data,
+         * and send a second request asking for all the requested Data in a single request
+         * */
+
         public IndicatorDataListener(String baseUrl, Response.Listener<IndicatorData[]> listener, Response.ErrorListener errorListener) {
             super(baseUrl, listener, errorListener);
         }

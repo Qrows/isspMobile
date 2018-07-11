@@ -14,10 +14,23 @@ import org.json.JSONObject;
 import java.util.LinkedList;
 
 public class IndicatorRequest extends Request<Indicator[]> {
+    /**
+     * IndicatorRequest is a specialized kind of request which get data from a given url
+     * using an HTTP GET method and parse it to Indicator[] objects.
+     * This class doesn't do networking work.
+     * The response is expected to be of json format, if not the request will fail.
+     * */
+
     private Response.Listener<Indicator[]> listener;
 
     public IndicatorRequest(String url, Response.Listener<Indicator[]> listener,
                             Response.ErrorListener errorListener) {
+        /**
+         * @param url where send the HTTP GET request
+         * @param listener tell what to do when the request receive ha successful response
+         * @param errorListener tell what to do when the request fail
+         * */
+
         super(Method.GET, url, errorListener);
         this.listener = listener;
     }

@@ -10,6 +10,10 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 
 public class NetworkController {
+    /**
+     * NetworkController is a singleton class which handle the networking work.
+     * it receive request and send them in a FIFO order.
+     * */
     private static NetworkController mInstance;
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
